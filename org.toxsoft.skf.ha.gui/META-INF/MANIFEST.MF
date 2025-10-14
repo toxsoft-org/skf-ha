@@ -3,6 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: HA (High Availability) SkService GUI Library
 Bundle-SymbolicName: org.toxsoft.skf.ha.gui
 Bundle-Version: 1.0.0.qualifier
+Export-Package: org.toxsoft.skf.ha.gui,
+ org.toxsoft.skf.ha.gui.l10n
 Bundle-Activator: org.toxsoft.skf.ha.gui.Activator
 Bundle-Vendor: toxsoft.org
 Require-Bundle: jakarta.inject.jakarta.inject-api,

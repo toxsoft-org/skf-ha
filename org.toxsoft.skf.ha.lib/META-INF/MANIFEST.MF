@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: HA (High Availability) SkService Library
 Bundle-SymbolicName: org.toxsoft.skf.ha.lib
 Bundle-Version: 1.0.0.qualifier
+Export-Package: org.toxsoft.skf.ha.lib
 Require-Bundle: org.toxsoft.core.tslib,
  org.toxsoft.core.txtproj.lib,
  org.toxsoft.uskat.core,

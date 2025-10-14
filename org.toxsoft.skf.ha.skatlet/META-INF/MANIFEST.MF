@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: HA (High Availablity) Skatlet
+Bundle-SymbolicName: org.toxsoft.skf.ha.skatlet
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: ToxSoft
+Automatic-Module-Name: org.toxsoft.skf.ha.skatlet
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Require-Bundle: org.toxsoft.extlibs.log4j,
+ org.toxsoft.core.tslib,
+ org.toxsoft.core.log4j,
+ org.toxsoft.uskat.core,
+ org.toxsoft.skf.ha.lib
+Export-Package: org.toxsoft.skf.ha.skatlet
+TsPluginContainerVersion: 2
+TsPluginVersion: {2,1,2024-05-01_00:00:00}
+TsPluginType: Skatlet
+TsPluginClassName: org.toxsoft.skf.ha.skatlet.SkHaSkatlet
