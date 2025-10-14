@@ -15,6 +15,11 @@ public interface ISkHaCluster
   String CMDID_SET_MAIN   = "cmdSetMain";
   String CMDARGID_MAIN_ID = "cmdArgMainId";
 
+  String EVID_MAIN_CHANGED    = "evMainChanged";
+  String EVPRMID_CLUSTER_ID   = "evPrmClusterId";
+  String EVPRMID_PREV_MAIN_ID = "evPrmPrevMainId";
+  String EVPRMID_NEW_MAIN_ID  = "evPrmNewMainId";
+
   Skid owner();
 
   Skid setOwner( Skid aOwnerId );

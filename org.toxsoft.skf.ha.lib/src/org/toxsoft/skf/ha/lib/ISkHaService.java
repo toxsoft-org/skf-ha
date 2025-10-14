@@ -1,5 +1,6 @@
 package org.toxsoft.skf.ha.lib;
 
+import org.toxsoft.core.tslib.bricks.events.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.uskat.core.*;
@@ -35,5 +36,15 @@ public interface ISkHaService
   ISkHaCluster defineCluster( Skid aClusterId );
 
   boolean removeCluster( Skid aClusterId );
+
+  // ------------------------------------------------------------------------------------
+  // Service support
+
+  /**
+   * Returns the service eventer.
+   *
+   * @return {@link ITsEventer} - the service eventer
+   */
+  ITsEventer<ISkHaServiceListener> eventer();
 
 }
