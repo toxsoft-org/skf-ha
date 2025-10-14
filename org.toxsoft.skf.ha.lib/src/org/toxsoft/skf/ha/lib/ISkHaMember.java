@@ -6,5 +6,7 @@ import org.toxsoft.uskat.core.api.objserv.*;
 public interface ISkHaMember
     extends ISkObject {
 
+  ISkHaCluster cluster();
+
   boolean isMain();
 }
