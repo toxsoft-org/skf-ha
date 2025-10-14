@@ -36,6 +36,4 @@ public interface ISkHaService
 
   boolean removeCluster( Skid aClusterId );
 
-  // TODO develop API
-
 }
