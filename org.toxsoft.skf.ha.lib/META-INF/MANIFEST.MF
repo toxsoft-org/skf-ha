@@ -5,9 +5,7 @@ Bundle-SymbolicName: org.toxsoft.skf.ha.lib
 Bundle-Version: 1.0.0.qualifier
 Export-Package: org.toxsoft.skf.ha.lib
 Require-Bundle: org.toxsoft.core.tslib,
- org.toxsoft.core.txtproj.lib,
- org.toxsoft.uskat.core,
- org.toxsoft.uskat.backend.memtext
+ org.toxsoft.uskat.core
 Bundle-Vendor: toxsoft.org
 Automatic-Module-Name: org.toxsoft.skf.ha.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-21
