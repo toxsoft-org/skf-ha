@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <category-def name="org.toxsoft.skf.ha.releng.category" label="org.toxsoft.skf.ha.releng Category">
+      <description>
+         org.toxsoft.skf.ha.releng Category
+      </description>
+   </category-def>
+
+   <bundle id="org.toxsoft.skf.ha.lib"/>
+   <bundle id="org.toxsoft.skf.ha.gui"/>
+   <bundle id="org.toxsoft.skf.ha.skatlet"/>
+
+   <!-- sources -->
+   <bundle id="org.toxsoft.skf.ha.lib.source"/>
+   <bundle id="org.toxsoft.skf.ha.gui.source"/>
+   <bundle id="org.toxsoft.skf.ha.skatlet.source"/>
+
+</site>
