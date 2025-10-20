@@ -53,10 +53,10 @@ public interface ISkHaService
    * The ID of primary member is added to the cluster if it has not yet been added.
    *
    * @param aClusterId String cluster ID.
-   * @param aPrimaryMemberId {@link Skid} primary cluster member ID.
+   * @param aPrimaryMember {@link Skid} primary cluster member ID.
    * @return {@link ISkHaCluster} the created cluster.
    */
-  ISkHaCluster defineCluster( String aClusterId, Skid aPrimaryMemberId );
+  ISkHaCluster defineCluster( String aClusterId, Skid aPrimaryMember );
 
   /**
    * Remove a cluster.
