@@ -1,7 +1,7 @@
 package org.toxsoft.skf.ha.lib;
 
 import org.toxsoft.core.tslib.bricks.events.*;
-import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.*;
@@ -25,17 +25,48 @@ public interface ISkHaService
   String SERVICE_ID = ISkHardConstants.SK_SYSEXT_SERVICE_ID_PREFIX + ".HighAvailability";
 
   /**
-   * @param aOwnerId
-   * @return
+   * Returns clusters.
+   *
+   * @return {@link IStridablesList}&lt;{@link ISkHaCluster}&gt; cluster list.
+   */
+  IStridablesList<ISkHaCluster> clusters();
+
+  /**
+   * Returns the IDs of the cluster owners.
+   *
+   * @return {@link IStridablesList}&lt;{@link ISkHaCluster}&gt; IDs of the cluster owners.
+   */
+  ISkidList clusterOwnerIds();
+
+  /**
+   * Returns clusters by cluster owner ID.
+   *
+   * @param aOwnerId {@link Skid} ID of cluster owner. {@link Skid#NONE}: returns clusters without owner.
+   * @return {@link IStridablesList}&lt;{@link ISkHaCluster}&gt; cluster list.
    * @see {@link ISkHaCluster#owner()}, {@link ISkHaCluster#setOwner(Skid)}
    */
-  IList<ISkHaCluster> clusters( Skid aOwnerId );
+  IStridablesList<ISkHaCluster> clusters( Skid aOwnerId );
 
-  IList<ISkHaCluster> clusters();
+  /**
+   * Create/update the cluster.
+   * <p>
+   * The ID of primary member is added to the cluster if it has not yet been added.
+   *
+   * @param aClusterId String cluster ID.
+   * @param aPrimaryMemberId {@link Skid} primary cluster member ID.
+   * @return {@link ISkHaCluster} the created cluster.
+   */
+  ISkHaCluster defineCluster( String aClusterId, Skid aPrimaryMemberId );
 
-  ISkHaCluster defineCluster( Skid aClusterId );
-
-  boolean removeCluster( Skid aClusterId );
+  /**
+   * Remove a cluster.
+   * <p>
+   * Does nothing if the cluster does not exists.
+   *
+   * @param aClusterId String cluster ID.
+   * @return boolean <b>true</b> the cluster removed. <b>false</b> the cluster does not exist.
+   */
+  boolean removeCluster( String aClusterId );
 
   // ------------------------------------------------------------------------------------
   // Service support
