@@ -49,7 +49,7 @@ public interface ISkHaCluster
   /**
    * Returns the IDs of cluster members.
    *
-   * @return {@link ISkidList} the IDs of cluster members. The list cannot be empty (aleast {@link #primaryMemberId()}).
+   * @return {@link ISkidList} the IDs of cluster members. The list cannot be empty (aleast {@link #primaryMember()}).
    */
   ISkidList memberIds();
 
