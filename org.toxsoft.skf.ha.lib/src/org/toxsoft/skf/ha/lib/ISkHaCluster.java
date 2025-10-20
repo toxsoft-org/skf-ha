@@ -44,7 +44,7 @@ public interface ISkHaCluster
    *
    * @return {@link Skid} member ID.
    */
-  Skid primaryMemberId();
+  Skid primaryMember();
 
   /**
    * Returns the IDs of cluster members.
