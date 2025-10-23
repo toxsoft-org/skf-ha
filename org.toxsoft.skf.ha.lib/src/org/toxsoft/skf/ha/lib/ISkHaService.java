@@ -53,18 +53,21 @@ public interface ISkHaService
   /**
    * Create/update the cluster.
    * <p>
-   * The ID of primary member is added to the cluster if it has not yet been added.
-   * <p>
-   * FIXME question: how to create new cluster without primary member? <br>
-   * FIXME question: how to edit existing cluster not changing existing primary member?
+   * List of member may be empty list, it may contain or not the <code>aPrimaryMember</code> object. Anyway
+   * <code>aPrimaryMember</code> will be added to the cluster members and set as primary member.
    *
    * @param aClusterId String - cluster ID.
+   * @param aName String - cluster name
+   * @param aDescription String - cluster description
    * @param aPrimaryMember {@link Skid} - primary cluster member ID
+   * @param aMembers {@link ISkidList} - the initial members of the cluster, may be an empty list
    * @return {@link ISkHaCluster} - the created cluster
    * @throws TsNullArgumentRtException any argument = <code>null</code>
-   * @throws TsValidationFailedRtException failed {@link ISkHaServiceValidator#canDefineCluster(String, Skid)}
+   * @throws TsValidationFailedRtException failed
+   *           {@link ISkHaServiceValidator#canCreateCluster(String, String, String, Skid, ISkidList)}
    */
-  ISkHaCluster defineCluster( String aClusterId, Skid aPrimaryMember );
+  ISkHaCluster createCluster( String aClusterId, String aName, String aDescription, Skid aPrimaryMember,
+      ISkidList aMembers );
 
   /**
    * Remove a cluster.

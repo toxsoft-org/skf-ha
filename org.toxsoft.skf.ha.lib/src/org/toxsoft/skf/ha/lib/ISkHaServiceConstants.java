@@ -31,8 +31,6 @@ public interface ISkHaServiceConstants {
 
   /**
    * ID of RT-data {@link #RTDINF_PRIMARY}.
-   * <p>
-   * FIXME maybe primary member must be also a rivet?
    */
   String RTDID_PRIMARY = "rtdPrimary"; //$NON-NLS-1$
 

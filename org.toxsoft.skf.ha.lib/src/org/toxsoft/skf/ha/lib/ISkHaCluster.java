@@ -27,9 +27,17 @@ public interface ISkHaCluster
   Skid owner();
 
   /**
+   * Changes the cluster name and description.
+   *
+   * @param aName String - cluster name
+   * @param aDescription String - cluster description
+   * @throws TsNullArgumentRtException any argument = <code>null</code>
+   * @throws TsValidationFailedRtException failed {@link ISkHaServiceValidator#canEditCluster(String, String)}
+   */
+  void editCluster( String aName, String aDescription );
+
+  /**
    * Define/update the cluster owner ID.
-   * <p>
-   * FIXME cluster without owner - what it is, maybe cluster owner is mandatory?
    *
    * @param aOwnerId {@link Skid} - owner SKID or {@link Skid#NONE} for no owner.
    * @return {@link Skid} - owner SKID before the method call
@@ -77,14 +85,13 @@ public interface ISkHaCluster
   boolean removeMember( Skid aMemberId );
 
   /**
-   * Sends a command to change the primary member of the cluster.
-   * <p>
-   * FIXME why this method if there is {@link ISkHaService#defineCluster(String, Skid)} ? <br>
-   * FIXME мутно для меня - нде-то основной элемент кластера через метод, а где-то через команду...
+   * Sends a command with request to change the primary member of the cluster.
    *
-   * @param aMemberId {@link Skid} member ID.
-   * @return {@link ISkCommand} command.
+   * @param aMemberId {@link Skid} - the member ID
+   * @return {@link ISkCommand} - created command
+   * @throws TsNullArgumentRtException any argument = <code>null</code>.
+   * @throws TsItemNotFoundRtException <code>aMemberId</code> is not a member of this cluster
    */
-  ISkCommand cmdChangePrimaryMember( Skid aMemberId );
+  ISkCommand requestPrimaryMemberChange( Skid aMemberId );
 
 }

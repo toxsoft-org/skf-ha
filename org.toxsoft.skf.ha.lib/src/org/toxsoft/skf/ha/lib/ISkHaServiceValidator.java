@@ -11,7 +11,10 @@ import org.toxsoft.core.tslib.gw.skid.*;
 @SuppressWarnings( "javadoc" )
 public interface ISkHaServiceValidator {
 
-  ValidationResult canDefineCluster( String aClusterId, Skid aPrimaryMember );
+  ValidationResult canCreateCluster( String aClusterId, String aName, String aDescription, Skid aPrimaryMember,
+      ISkidList aMembers );
+
+  ValidationResult canEditCluster( String aName, String aDescription );
 
   ValidationResult canRemoveCluster( String aClusterId );
 
