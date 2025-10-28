@@ -20,21 +20,22 @@ public interface ISkHaCluster
   String CLASS_ID = ISkHaServiceConstants.CLSID_CLUSTER;
 
   /**
-   * Returns the cluster owner ID.
-   *
-   * @return {@link Skid} ID of the cluster. {@link Skid#NONE}: the cluster has no owner.
-   */
-  Skid owner();
-
-  /**
    * Changes the cluster name and description.
    *
    * @param aName String - cluster name
    * @param aDescription String - cluster description
    * @throws TsNullArgumentRtException any argument = <code>null</code>
-   * @throws TsValidationFailedRtException failed {@link ISkHaServiceValidator#canEditCluster(String, String)}
+   * @throws TsValidationFailedRtException failed
+   *           {@link ISkHaServiceValidator#canEditCluster(ISkHaCluster, String, String)}
    */
   void editCluster( String aName, String aDescription );
+
+  /**
+   * Returns the cluster owner ID.
+   *
+   * @return {@link Skid} ID of the cluster. {@link Skid#NONE}: the cluster has no owner.
+   */
+  Skid owner();
 
   /**
    * Define/update the cluster owner ID.

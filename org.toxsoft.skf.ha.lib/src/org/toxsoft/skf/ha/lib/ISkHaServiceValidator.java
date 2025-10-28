@@ -14,9 +14,9 @@ public interface ISkHaServiceValidator {
   ValidationResult canCreateCluster( String aClusterId, String aName, String aDescription, Skid aPrimaryMember,
       ISkidList aMembers );
 
-  ValidationResult canEditCluster( String aName, String aDescription );
-
   ValidationResult canRemoveCluster( String aClusterId );
+
+  ValidationResult canEditCluster( ISkHaCluster aClaster, String aName, String aDescription );
 
   ValidationResult canSetOwner( ISkHaCluster aClaster, Skid aOwnerId );
 
