@@ -16,12 +16,12 @@ public interface ISkHaServiceValidator {
 
   ValidationResult canRemoveCluster( String aClusterId );
 
-  ValidationResult canEditCluster( ISkHaCluster aClaster, String aName, String aDescription );
+  ValidationResult canEditCluster( ISkHaCluster aCluster, String aName, String aDescription );
 
-  ValidationResult canSetOwner( ISkHaCluster aClaster, Skid aOwnerId );
+  ValidationResult canSetOwner( ISkHaCluster aCluster, Skid aOwnerId );
 
-  ValidationResult canAddMember( ISkHaCluster aClaster, Skid aMemberId );
+  ValidationResult canAddMember( ISkHaCluster aCluster, Skid aMemberId );
 
-  ValidationResult canRemoveMember( ISkHaCluster aClaster, Skid aMemberId );
+  ValidationResult canRemoveMember( ISkHaCluster aCluster, Skid aMemberId );
 
 }

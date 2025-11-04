@@ -155,8 +155,8 @@ public interface ISkHaServiceConstants {
    */
   IDtoClassInfo CLSINF_CLUSTER = DtoClassInfo.create( CLSID_CLUSTER, IGwHardConstants.GW_ROOT_CLASS_ID, ///
       OptionSetUtils.createOpSet( ///
-          TSID_NAME, ENG_CLUSTER_CLASS, ///
-          TSID_DESCRIPTION, ENG_CLUSTER_CLASS_D, ///
+          TSID_NAME, STR_CLUSTER_CLASS, ///
+          TSID_DESCRIPTION, STR_CLUSTER_CLASS_D, ///
           ISkHardConstants.OPDEF_SK_IS_SOURCE_CODE_DEFINED_CLASS, AV_TRUE, ///
           ISkHardConstants.OPDEF_SK_IS_SOURCE_USKAT_SYSEXT_CLASS, AV_TRUE ///
       ), ///

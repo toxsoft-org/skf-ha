@@ -51,6 +51,15 @@ public interface ISkHaService
   IStridablesList<ISkHaCluster> clusters( Skid aOwnerId );
 
   /**
+   * Find a cluster.
+   *
+   * @param aClusterId String - cluster ID.
+   * @return {@link ISkHaCluster} - the cluster or null if cluster does not exist
+   * @throws TsNullArgumentRtException any argument = <code>null</code>
+   */
+  ISkHaCluster findCluster( String aClusterId );
+
+  /**
    * Create/update the cluster.
    * <p>
    * List of member may be empty list, it may contain or not the <code>aPrimaryMember</code> object. Anyway
