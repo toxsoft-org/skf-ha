@@ -231,9 +231,7 @@ public class SkHaService
     public ValidationResult canCreateCluster( String aClusterId, String aName, String aDescription, Skid aPrimaryMember,
         ISkidList aMembers ) {
       if( aPrimaryMember == Skid.NONE ) {
-        ISkHaCluster cluster = findCluster( aClusterId );
-        String errMsg = (cluster == null ? ERR_CREATE_CLUSTER_PRIMARY_NONE : ERR_UPDATE_CLUSTER_PRIMARY_NONE);
-        return ValidationResult.error( errMsg, aClusterId );
+        return ValidationResult.error( ERR_PRIMARY_IS_NONE );
       }
       return ValidationResult.SUCCESS;
     }
@@ -242,7 +240,7 @@ public class SkHaService
     public ValidationResult canRemoveCluster( String aClusterId ) {
       ISkHaCluster cluster = findCluster( aClusterId );
       if( cluster == null ) {
-        return ValidationResult.error( ERR_REMOVE_NON_CLUSTER, aClusterId );
+        return ValidationResult.error( ERR_CLUSTER_NOT_FOUND );
       }
       return ValidationResult.SUCCESS;
     }
@@ -260,7 +258,7 @@ public class SkHaService
     @Override
     public ValidationResult canAddMember( ISkHaCluster aCluster, Skid aMemberId ) {
       if( aMemberId == Skid.NONE ) {
-        return ValidationResult.error( ERR_ADD_MEMBER_NONE, aCluster.id() );
+        return ValidationResult.error( ERR_MEMBER_IS_NONE );
       }
       return ValidationResult.SUCCESS;
     }
@@ -268,7 +266,10 @@ public class SkHaService
     @Override
     public ValidationResult canRemoveMember( ISkHaCluster aCluster, Skid aMemberId ) {
       if( !aCluster.memberIds().hasElem( aMemberId ) ) {
-        return ValidationResult.error( ERR_REMOVE_NON_MEMBER, aCluster.id(), aMemberId );
+        return ValidationResult.error( ERR_MEMBER_NOT_FOUND );
+      }
+      if( aCluster.primaryMember().equals( aMemberId ) ) {
+        return ValidationResult.error( ERR_REMOVE_PRIMARY );
       }
       return ValidationResult.SUCCESS;
     }
@@ -282,7 +283,6 @@ public class SkHaService
    */
   public SkHaService( IDevCoreApi aCoreApi ) {
     super( SERVICE_ID, aCoreApi );
-    svs.addValidator( builtinValidator );
   }
 
   // ------------------------------------------------------------------------------------
@@ -291,10 +291,19 @@ public class SkHaService
 
   @Override
   protected void doInit( ITsContextRo aArgs ) {
-
+    // create classes and register object creators
+    for( SkHaLibUtils.BuiltinClassDef b : SkHaLibUtils.BUILTIN_CLASS_DEFS ) {
+      sysdescr().defineClass( b.dto() );
+      if( b.objCreator() != null ) {
+        objServ().registerObjectCreator( b.classId(), b.objCreator() );
+      }
+    }
     // claim on self classes
     sysdescr().svs().addValidator( claimingValidator );
     objServ().svs().addValidator( claimingValidator );
+
+    // register builtin validator
+    svs.addValidator( builtinValidator );
 
     // listen to object service to fire ISkHaServiceListener.onXxx() events
     objServ().eventer().addListener( objectServiceListener );
@@ -321,12 +330,13 @@ public class SkHaService
   //
 
   private static IDtoFullObject makeDtoFullObject( String aClusterId, String aName, String aDescription,
-      ISkidList aMembers ) {
-    TsNullArgumentRtException.checkNulls( aClusterId, aName, aDescription, aMembers );
+      Skid aPrimaryMember, ISkidList aMembers ) {
+    TsNullArgumentRtException.checkNulls( aClusterId, aName, aDescription, aPrimaryMember, aMembers );
     Skid skid = new Skid( CLSID_CLUSTER, aClusterId );
     DtoFullObject dto = new DtoFullObject( skid );
     dto.attrs().setStr( AID_NAME, aName );
     dto.attrs().setStr( AID_DESCRIPTION, aDescription );
+    dto.rivets().map().put( RVTID_PRIMARY, new SkidList( aPrimaryMember ) );
     dto.rivets().map().put( RVTID_MEMBERS, aMembers );
     return dto;
   }
@@ -384,10 +394,10 @@ public class SkHaService
     IMap<Gwid, ISkReadCurrDataChannel> mapR;
     IMap<Gwid, ISkWriteCurrDataChannel> mapW;
     // add primary channels
-    Gwid gwidAlert = Gwid.createRtdata( CLSID_CLUSTER, aClusterId, RTDID_PRIMARY );
-    mapR = rtdService().createReadCurrDataChannels( new GwidList( gwidAlert ) );
+    Gwid gwidPrimary = Gwid.createRtdata( CLSID_CLUSTER, aClusterId, RTDID_PRIMARY );
+    mapR = rtdService().createReadCurrDataChannels( new GwidList( gwidPrimary ) );
     chReadPrimaries.put( aClusterId, mapR.values().first() );
-    mapW = rtdService().createWriteCurrDataChannels( new GwidList( gwidAlert ) );
+    mapW = rtdService().createWriteCurrDataChannels( new GwidList( gwidPrimary ) );
     chWritePrimaries.put( aClusterId, mapW.values().first() );
   }
 
@@ -448,7 +458,7 @@ public class SkHaService
     if( !members.hasElem( aPrimaryMember ) ) {
       members.add( aPrimaryMember );
     }
-    IDtoFullObject dto = makeDtoFullObject( aClusterId, aName, aDescription, members );
+    IDtoFullObject dto = makeDtoFullObject( aClusterId, aName, aDescription, aPrimaryMember, members );
     ISkHaCluster prevCluster = findCluster( aClusterId );
     pauseCoreValidation();
     try {

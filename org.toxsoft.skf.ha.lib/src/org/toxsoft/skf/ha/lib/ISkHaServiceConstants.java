@@ -35,6 +35,11 @@ public interface ISkHaServiceConstants {
   /**
    * ID of rivet {@link #RVTINF_OWNER}.
    */
+  String RVTID_PRIMARY = "rvtPrimary";
+
+  /**
+   * ID of rivet {@link #RVTINF_OWNER}.
+   */
   String RVTID_OWNER = "rvtOwner";
 
   /**
@@ -63,11 +68,6 @@ public interface ISkHaServiceConstants {
   String EVID_PRIMARY_CHANGED = "evPrimaryChanged";
 
   /**
-   * ID of parameter {@link #EVPRMINF_CLUSTER_ID} of the event {@link #EVINF_PRIMARY_CHANGED}.
-   */
-  String EVPRMID_CLUSTER_ID = "clusterId";
-
-  /**
    * ID of parameter {@link #EVPRMINF_OLD_PRIMARY_ID} of the event {@link #EVINF_PRIMARY_CHANGED}.
    */
   String EVPRMID_OLD_PRIMARY_ID = "oldPrimaryId";
@@ -78,10 +78,19 @@ public interface ISkHaServiceConstants {
   String EVPRMID_NEW_PRIMARY_ID = "newPrimaryId";
 
   /**
+   * Rivet of {@link #CLSINF_CLUSTER}: primary member of the cluster.
+   */
+  IDtoRivetInfo RVTINF_PRIMARY = DtoRivetInfo.create2( RVTID_PRIMARY, ISkHaCluster.CLASS_ID, 1,    ///
+      TSID_NAME, "Primary", TSID_DESCRIPTION, "Primary member of the cluster" );                   // FIXME define INFO
+                                                                                                   // using ENG_XXX //
+                                                                                                   // localization
+  /**
    * Rivet of {@link #CLSINF_CLUSTER}: owner object SKID.
    */
-  IDtoRivetInfo RVTINF_OWNER = DtoRivetInfo.create2( RVTID_OWNER, ISkHaCluster.CLASS_ID, 1, ///
-      TSID_NAME, "Owner", TSID_DESCRIPTION, "Owner object SKID" ); // FIXME define INFO using ENG_XXX localization
+  IDtoRivetInfo RVTINF_OWNER   = DtoRivetInfo.create2( RVTID_OWNER, ISkHaCluster.CLASS_ID, 1,      ///
+      TSID_NAME, "Owner", TSID_DESCRIPTION, "Owner object SKID" );                                 // FIXME define INFO
+                                                                                                   // using ENG_XXX
+                                                                                                   // localization
 
   /**
    * Rivet of {@link #CLSINF_CLUSTER}: cluster members SKIDs.
@@ -113,14 +122,6 @@ public interface ISkHaServiceConstants {
   ); // FIXME define INFO using ENG_XXX localization
 
   /**
-   * Parameter of {@link #EVINF_PRIMARY_CHANGED}: SKID of changed cluster.
-   */
-  IDataDef EVPRMINF_CLUSTER_ID = DataDef.create3( EVPRMID_CLUSTER_ID, DT_SKID, ///
-      TSID_NAME, "Cluster", ///
-      TSID_DESCRIPTION, "SKID of changed cluster.", TSID_IS_MANDATORY, AV_TRUE ///
-  ); // FIXME define INFO using ENG_XXX localization
-
-  /**
    * Parameter of {@link #EVINF_PRIMARY_CHANGED}: old (previous) SKID of the primary member.
    */
   IDataDef EVPRMINF_OLD_PRIMARY_ID = DataDef.create3( EVPRMID_OLD_PRIMARY_ID, DT_SKID, ///
@@ -141,7 +142,6 @@ public interface ISkHaServiceConstants {
    */
   IDtoEventInfo EVINF_PRIMARY_CHANGED = DtoEventInfo.create1( EVID_PRIMARY_CHANGED, true, ///
       new StridablesList<>( ///
-          EVPRMINF_CLUSTER_ID, ///
           EVPRMINF_OLD_PRIMARY_ID, ///
           EVPRMINF_NEW_PRIMARY_ID ///
       ), //
@@ -160,6 +160,7 @@ public interface ISkHaServiceConstants {
           ISkHardConstants.OPDEF_SK_IS_SOURCE_CODE_DEFINED_CLASS, AV_TRUE, ///
           ISkHardConstants.OPDEF_SK_IS_SOURCE_USKAT_SYSEXT_CLASS, AV_TRUE ///
       ), ///
+      RVTINF_PRIMARY, ///
       RVTINF_OWNER, ///
       RVTINF_MEMBERS, ///
       RTDINF_PRIMARY, ///

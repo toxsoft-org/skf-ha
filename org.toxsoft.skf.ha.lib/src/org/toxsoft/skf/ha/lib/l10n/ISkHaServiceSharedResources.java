@@ -12,14 +12,13 @@ public interface ISkHaServiceSharedResources {
 
   String STR_CLUSTER_CLASS_D = "Cluster of system hardware and software components";
 
-  String ERR_CREATE_CLUSTER_PRIMARY_NONE = "Create cluster %s: primary member cannot have ID NONE.";
+  String ERR_PRIMARY_IS_NONE = "Primary member cannot have ID NONE.";
 
-  String ERR_UPDATE_CLUSTER_PRIMARY_NONE = "Update cluster %s: primary member cannot have ID NONE.";
+  String ERR_CLUSTER_NOT_FOUND = "The cluster does not exist.";
 
-  String ERR_REMOVE_NON_CLUSTER = "Remove cluster %s: cluster not found.";
+  String ERR_MEMBER_IS_NONE = "Cluster member cannot have ID NONE.";
 
-  String ERR_ADD_MEMBER_NONE = "Adding a member to cluster %s: member cannot have ID NONE.";
+  String ERR_MEMBER_NOT_FOUND = "The member does not exist.";
 
-  String ERR_REMOVE_NON_MEMBER = "Removing member from cluster %s : %s is not member.";
-
+  String ERR_REMOVE_PRIMARY = "Cannot remove a cluster member that is the primary member of the cluster.";
 }

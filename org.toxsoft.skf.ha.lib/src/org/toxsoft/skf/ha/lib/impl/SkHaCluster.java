@@ -24,7 +24,7 @@ import org.toxsoft.uskat.core.impl.dto.*;
  *
  * @author mvk
  */
-class SkHaCluster
+public class SkHaCluster
     extends SkObject
     implements ISkHaCluster {
 
@@ -79,7 +79,8 @@ class SkHaCluster
 
   @Override
   public Skid primaryMember() {
-    return readRtdataIfOpen( RTDID_PRIMARY ).asValobj();
+    ISkidList list = rivets().getSkidList( RVTID_PRIMARY );
+    return list.first();
   }
 
   @Override
@@ -92,11 +93,11 @@ class SkHaCluster
   public boolean addMember( Skid aMemberId ) {
     TsNullArgumentRtException.checkNull( aMemberId );
     ISkHaService service = (ISkHaService)coreApi().services().getByKey( ISkHaService.SERVICE_ID );
-    TsValidationFailedRtException.checkError( service.svs().validator().canAddMember( this, aMemberId ) );
     SkidList members = new SkidList( memberIds() );
     if( aMemberId == Skid.NONE || members.hasElem( aMemberId ) ) {
       return false;
     }
+    TsValidationFailedRtException.checkError( service.svs().validator().canAddMember( this, aMemberId ) );
     members.add( aMemberId );
     IStringMapEdit<ISkidList> rivets = new StringMap<>( rivets().map() );
     rivets.put( RVTID_MEMBERS, members );
@@ -108,11 +109,11 @@ class SkHaCluster
   public boolean removeMember( Skid aMemberId ) {
     TsNullArgumentRtException.checkNull( aMemberId );
     ISkHaService service = (ISkHaService)coreApi().services().getByKey( ISkHaService.SERVICE_ID );
-    TsValidationFailedRtException.checkError( service.svs().validator().canRemoveMember( this, aMemberId ) );
     SkidList members = new SkidList( memberIds() );
     if( aMemberId == Skid.NONE || !members.hasElem( aMemberId ) ) {
       return false;
     }
+    TsValidationFailedRtException.checkError( service.svs().validator().canRemoveMember( this, aMemberId ) );
     members.remove( aMemberId );
     IStringMapEdit<ISkidList> rivets = new StringMap<>( rivets().map() );
     rivets.put( RVTID_MEMBERS, members );
