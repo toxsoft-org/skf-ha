@@ -351,8 +351,8 @@ public class SkHaService
     DtoFullObject dto = new DtoFullObject( skid );
     dto.attrs().setStr( AID_NAME, aName );
     dto.attrs().setStr( AID_DESCRIPTION, aDescription );
-    dto.rivets().map().put( RVTID_PRIMARY, new SkidList( aPrimaryMember ) );
-    dto.rivets().map().put( RVTID_MEMBERS, aMembers );
+    dto.links().map().put( LNKID_PRIMARY, new SkidList( aPrimaryMember ) );
+    dto.links().map().put( LNKID_MEMBERS, aMembers );
     return dto;
   }
 

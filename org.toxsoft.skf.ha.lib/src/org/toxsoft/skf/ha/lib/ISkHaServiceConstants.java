@@ -9,6 +9,8 @@ import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.coll.helpers.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
@@ -23,29 +25,24 @@ import org.toxsoft.uskat.core.impl.dto.*;
 public interface ISkHaServiceConstants {
 
   /**
-   * Maximum number of members in a cluster.
-   */
-  int CLUSTER_MEMBERS_MAX_SIZE = 32;
-
-  /**
    * ID of class {@link #CLSINF_CLUSTER}.
    */
   String CLSID_CLUSTER = SK_ID + ".ha.Cluster";
 
   /**
-   * ID of rivet {@link #RVTINF_OWNER}.
+   * ID of link {@link #LNKINF_OWNER}.
    */
-  String RVTID_PRIMARY = "rvtPrimary";
+  String LNKID_PRIMARY = "lnkPrimary";
 
   /**
-   * ID of rivet {@link #RVTINF_OWNER}.
+   * ID of link {@link #LNKINF_OWNER}.
    */
-  String RVTID_OWNER = "rvtOwner";
+  String LNKID_OWNER = "lnkOwner";
 
   /**
-   * ID of rivet {@link #RVTINF_MEMBERS}.
+   * ID of link {@link #LNKINF_MEMBERS}.
    */
-  String RVTID_MEMBERS = "rvtMembers";
+  String LNKID_MEMBERS = "lnkMembers";
 
   /**
    * ID of RT-data {@link #RTDINF_PRIMARY}.
@@ -78,67 +75,91 @@ public interface ISkHaServiceConstants {
   String EVPRMID_NEW_PRIMARY_ID = "newPrimaryId";
 
   /**
-   * Rivet of {@link #CLSINF_CLUSTER}: primary member of the cluster.
+   * Link of {@link #CLSINF_CLUSTER}: primary member of the cluster.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
-  IDtoRivetInfo RVTINF_PRIMARY = DtoRivetInfo.create2( RVTID_PRIMARY, ISkHaCluster.CLASS_ID, 1,    ///
-      TSID_NAME, "Primary", TSID_DESCRIPTION, "Primary member of the cluster" );                   // FIXME define INFO
-                                                                                                   // using ENG_XXX //
-                                                                                                   // localization
-  /**
-   * Rivet of {@link #CLSINF_CLUSTER}: owner object SKID.
-   */
-  IDtoRivetInfo RVTINF_OWNER   = DtoRivetInfo.create2( RVTID_OWNER, ISkHaCluster.CLASS_ID, 1,      ///
-      TSID_NAME, "Owner", TSID_DESCRIPTION, "Owner object SKID" );                                 // FIXME define INFO
-                                                                                                   // using ENG_XXX
-                                                                                                   // localization
+  IDtoLinkInfo LNKINF_PRIMARY = DtoLinkInfo.create2( LNKID_PRIMARY, ///
+      new StringArrayList( IGwHardConstants.GW_ROOT_CLASS_ID ), ///
+      // aMaxCount = 1, aIsExactCount = true, aIsEmptyProhibited = true, aIsDuplicatesProhibited = true
+      new CollConstraint( 1, true, true, true ), ///
+      TSID_NAME, "Primary", TSID_DESCRIPTION, "Primary member of the cluster" );
 
   /**
-   * Rivet of {@link #CLSINF_CLUSTER}: cluster members SKIDs.
+   * Link of {@link #CLSINF_CLUSTER}: owner object SKID.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
-  IDtoRivetInfo RVTINF_MEMBERS = DtoRivetInfo.create2( RVTID_MEMBERS, ISkHaCluster.CLASS_ID, CLUSTER_MEMBERS_MAX_SIZE, ///
-      TSID_NAME, "Members", TSID_DESCRIPTION, "Cluster members SKIDs" ); // FIXME define INFO using ENG_XXX localization
+  IDtoLinkInfo LNKINF_OWNER = DtoLinkInfo.create2( LNKID_OWNER, ///
+      new StringArrayList( IGwHardConstants.GW_ROOT_CLASS_ID ), ///
+      // aMaxCount = 1, aIsExactCount = false, aIsEmptyProhibited = false, aIsDuplicatesProhibited = true
+      new CollConstraint( 1, false, false, true ), ///
+      TSID_NAME, "Owner", TSID_DESCRIPTION, "Owner object SKID" );
+
+  /**
+   * Link of {@link #CLSINF_CLUSTER}: cluster members SKIDs.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
+   */
+  IDtoLinkInfo LNKINF_MEMBERS = DtoLinkInfo.create2( LNKID_MEMBERS, ///
+      new StringArrayList( IGwHardConstants.GW_ROOT_CLASS_ID ), ///
+      // aMaxCount = 0, aIsExactCount = false, aIsEmptyProhibited = false, aIsDuplicatesProhibited = true
+      new CollConstraint( 0, false, false, true ), ///
+      TSID_NAME, "Members", TSID_DESCRIPTION, "Cluster members SKIDs" );
 
   /**
    * RTdat of {@link #CLSINF_CLUSTER}: primary member SKID.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
   IDtoRtdataInfo RTDINF_PRIMARY = DtoRtdataInfo.create2( RTDID_PRIMARY, DT_SKID, true, true, false, 1_000L, ///
-      TSID_NAME, "Primary", TSID_DESCRIPTION, "Primary member SKID" ); // FIXME define INFO using ENG_XXX localization
+      TSID_NAME, "Primary", TSID_DESCRIPTION, "Primary member SKID" );
 
   /**
    * Argument of {@link #CMDINF_PRIMARY}: SKID of the new primary member.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
   IDataDef CMDARGINF_PRIMARY_ID = DataDef.create3( CMDARGID_PRIMARY_ID, DT_SKID, ///
       TSID_NAME, "Primary", ///
       TSID_DESCRIPTION, "SKID of the new primary member.", TSID_IS_MANDATORY, AV_TRUE ///
-  ); // FIXME define INFO using ENG_XXX localization
+  );
 
   /**
    * Command to {@link ISkHaCluster}: request to change primary member.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
   IDtoCmdInfo CMDINF_PRIMARY = DtoCmdInfo.create2( CMDID_SET_PRIMARY, OptionSetUtils.createOpSet( ///
       TSID_NAME, "Change primary.", //
       TSID_DESCRIPTION, "Request to change primary member." ), ///
       CMDARGINF_PRIMARY_ID //
-  ); // FIXME define INFO using ENG_XXX localization
+  );
 
   /**
    * Parameter of {@link #EVINF_PRIMARY_CHANGED}: old (previous) SKID of the primary member.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
   IDataDef EVPRMINF_OLD_PRIMARY_ID = DataDef.create3( EVPRMID_OLD_PRIMARY_ID, DT_SKID, ///
       TSID_NAME, "Old", ///
       TSID_DESCRIPTION, "Old (previous) SKID of the primary member.", TSID_IS_MANDATORY, AV_TRUE ///
-  ); // FIXME define INFO using ENG_XXX localization
+  );
 
   /**
    * Parameter of {@link #EVINF_PRIMARY_CHANGED}: new (current) SKID of the primary member.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
   IDataDef EVPRMINF_NEW_PRIMARY_ID = DataDef.create3( EVPRMID_NEW_PRIMARY_ID, DT_SKID, ///
       TSID_NAME, "New", ///
       TSID_DESCRIPTION, "New (current) SKID of the primary member.", TSID_IS_MANDATORY, AV_TRUE ///
-  ); // FIXME define INFO using ENG_XXX localization
+  );
 
   /**
    * EVent of {@link ISkHaCluster}: primary member has been changed.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
   IDtoEventInfo EVINF_PRIMARY_CHANGED = DtoEventInfo.create1( EVID_PRIMARY_CHANGED, true, ///
       new StridablesList<>( ///
@@ -148,10 +169,12 @@ public interface ISkHaServiceConstants {
       OptionSetUtils.createOpSet( ///
           TSID_NAME, "Primary changed", ///
           TSID_DESCRIPTION, "Primary member has been changed" ///
-      ) ); // FIXME define INFO using ENG_XXX localization
+      ) );
 
   /**
    * USkat implementation class of {@link ISkHaCluster}.
+   * <p>
+   * FIXME define INFO using ENG_XXX localization
    */
   IDtoClassInfo CLSINF_CLUSTER = DtoClassInfo.create( CLSID_CLUSTER, IGwHardConstants.GW_ROOT_CLASS_ID, ///
       OptionSetUtils.createOpSet( ///
@@ -160,9 +183,9 @@ public interface ISkHaServiceConstants {
           ISkHardConstants.OPDEF_SK_IS_SOURCE_CODE_DEFINED_CLASS, AV_TRUE, ///
           ISkHardConstants.OPDEF_SK_IS_SOURCE_USKAT_SYSEXT_CLASS, AV_TRUE ///
       ), ///
-      RVTINF_PRIMARY, ///
-      RVTINF_OWNER, ///
-      RVTINF_MEMBERS, ///
+      LNKINF_PRIMARY, ///
+      LNKINF_OWNER, ///
+      LNKINF_MEMBERS, ///
       RTDINF_PRIMARY, ///
       CMDINF_PRIMARY, ///
       EVINF_PRIMARY_CHANGED ///

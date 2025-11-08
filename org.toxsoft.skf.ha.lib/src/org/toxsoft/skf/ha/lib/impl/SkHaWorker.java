@@ -8,8 +8,6 @@ import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.coll.*;
-import org.toxsoft.core.tslib.coll.primtypes.*;
-import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -18,7 +16,6 @@ import org.toxsoft.uskat.core.api.cmdserv.*;
 import org.toxsoft.uskat.core.api.evserv.*;
 import org.toxsoft.uskat.core.devapi.*;
 import org.toxsoft.uskat.core.impl.*;
-import org.toxsoft.uskat.core.impl.dto.*;
 import org.toxsoft.uskat.core.utils.*;
 
 /**
@@ -112,10 +109,8 @@ public class SkHaWorker
               retValue = new SkCommandState( currTime, ESkCommandState.SUCCESS );
               return;
             }
-            // set primary
-            IStringMapEdit<ISkidList> rivets = new StringMap<>( cluster.rivets().map() );
-            rivets.put( RVTID_PRIMARY, new SkidList( newPrimaryId ) );
-            coreApi().objService().defineObject( new DtoObject( cluster.skid(), cluster.attrs(), rivets ) );
+            // set primary. aRemovedSkids = null
+            coreApi().linkService().defineLink( cluster.skid(), LNKID_PRIMARY, null, new SkidList( newPrimaryId ) );
             // set RtData
             cluster.writeRtdataIfOpen( RTDID_PRIMARY, avValobj( newPrimaryId ) );
             // fire event

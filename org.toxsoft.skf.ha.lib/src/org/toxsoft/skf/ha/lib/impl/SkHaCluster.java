@@ -7,8 +7,6 @@ import static org.toxsoft.uskat.core.ISkHardConstants.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.validator.impl.*;
-import org.toxsoft.core.tslib.coll.primtypes.*;
-import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -58,7 +56,7 @@ public class SkHaCluster
 
   @Override
   public Skid owner() {
-    ISkidList list = rivets().getSkidList( RVTID_OWNER );
+    ISkidList list = getLinkSkids( LNKID_OWNER );
     return (list.size() > 0 ? list.first() : Skid.NONE);
   }
 
@@ -71,21 +69,19 @@ public class SkHaCluster
     if( retValue.equals( aOwnerId ) ) {
       return retValue;
     }
-    IStringMapEdit<ISkidList> rivets = new StringMap<>( rivets().map() );
-    rivets.put( RVTID_OWNER, new SkidList( aOwnerId ) );
-    coreApi().objService().defineObject( new DtoObject( skid(), attrs(), rivets ) );
+    coreApi().linkService().defineLink( skid(), LNKID_OWNER, null, new SkidList( aOwnerId ) ); // aRemovedSkids = null
     return retValue;
   }
 
   @Override
   public Skid primaryMember() {
-    ISkidList list = rivets().getSkidList( RVTID_PRIMARY );
+    ISkidList list = getLinkSkids( LNKID_PRIMARY );
     return list.first();
   }
 
   @Override
   public ISkidList memberIds() {
-    ISkidList list = rivets().getSkidList( RVTID_MEMBERS );
+    ISkidList list = getLinkSkids( LNKID_MEMBERS );
     return list;
   }
 
@@ -99,9 +95,7 @@ public class SkHaCluster
     }
     TsValidationFailedRtException.checkError( service.svs().validator().canAddMember( this, aMemberId ) );
     members.add( aMemberId );
-    IStringMapEdit<ISkidList> rivets = new StringMap<>( rivets().map() );
-    rivets.put( RVTID_MEMBERS, members );
-    coreApi().objService().defineObject( new DtoObject( skid(), attrs(), rivets ) );
+    coreApi().linkService().defineLink( skid(), LNKID_MEMBERS, null, members ); // aRemovedSkids = null
     return true;
   }
 
@@ -115,9 +109,7 @@ public class SkHaCluster
     }
     TsValidationFailedRtException.checkError( service.svs().validator().canRemoveMember( this, aMemberId ) );
     members.remove( aMemberId );
-    IStringMapEdit<ISkidList> rivets = new StringMap<>( rivets().map() );
-    rivets.put( RVTID_MEMBERS, members );
-    coreApi().objService().defineObject( new DtoObject( skid(), attrs(), rivets ) );
+    coreApi().linkService().defineLink( skid(), LNKID_MEMBERS, null, members ); // aRemovedSkids = null
     return true;
   }
 
