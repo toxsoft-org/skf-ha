@@ -60,10 +60,12 @@ public interface ISkHaService
   ISkHaCluster findCluster( String aClusterId );
 
   /**
-   * Create/update the cluster.
+   * Create the cluster.
    * <p>
    * List of member may be empty list, it may contain or not the <code>aPrimaryMember</code> object. Anyway
    * <code>aPrimaryMember</code> will be added to the cluster members and set as primary member.
+   * <p>
+   * Does nothing if the cluster does already exist.
    *
    * @param aClusterId String - cluster ID.
    * @param aName String - cluster name

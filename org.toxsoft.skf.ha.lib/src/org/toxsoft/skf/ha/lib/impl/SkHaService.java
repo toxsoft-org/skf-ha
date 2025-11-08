@@ -230,8 +230,18 @@ public class SkHaService
     @Override
     public ValidationResult canCreateCluster( String aClusterId, String aName, String aDescription, Skid aPrimaryMember,
         ISkidList aMembers ) {
-      if( aPrimaryMember == Skid.NONE ) {
-        return ValidationResult.error( ERR_PRIMARY_IS_NONE );
+      ISkHaCluster cluster = findCluster( aClusterId );
+      if( cluster != null ) {
+        return ValidationResult.error( ERR_CLUSTER_DOES_ALREADY_EXIST );
+      }
+      ISkObjectService objService = objServ();
+      if( objService.find( aPrimaryMember ) == null ) {
+        return ValidationResult.error( ERR_MEMBER_NOT_FOUND, aPrimaryMember );
+      }
+      for( Skid member : aMembers ) {
+        if( objService.find( member ) == null ) {
+          return ValidationResult.error( ERR_MEMBER_NOT_FOUND, member );
+        }
       }
       return ValidationResult.SUCCESS;
     }
@@ -252,13 +262,18 @@ public class SkHaService
 
     @Override
     public ValidationResult canSetOwner( ISkHaCluster aCluster, Skid aOwnerId ) {
+      ISkObjectService objService = objServ();
+      if( objService.find( aOwnerId ) == null ) {
+        return ValidationResult.error( ERR_MEMBER_NOT_FOUND, aOwnerId );
+      }
       return ValidationResult.SUCCESS;
     }
 
     @Override
     public ValidationResult canAddMember( ISkHaCluster aCluster, Skid aMemberId ) {
-      if( aMemberId == Skid.NONE ) {
-        return ValidationResult.error( ERR_MEMBER_IS_NONE );
+      ISkObjectService objService = objServ();
+      if( objService.find( aMemberId ) == null ) {
+        return ValidationResult.error( ERR_MEMBER_NOT_FOUND, aMemberId );
       }
       return ValidationResult.SUCCESS;
     }
@@ -266,7 +281,7 @@ public class SkHaService
     @Override
     public ValidationResult canRemoveMember( ISkHaCluster aCluster, Skid aMemberId ) {
       if( !aCluster.memberIds().hasElem( aMemberId ) ) {
-        return ValidationResult.error( ERR_MEMBER_NOT_FOUND );
+        return ValidationResult.error( ERR_MEMBER_NOT_FOUND, aMemberId );
       }
       if( aCluster.primaryMember().equals( aMemberId ) ) {
         return ValidationResult.error( ERR_REMOVE_PRIMARY );
@@ -452,6 +467,10 @@ public class SkHaService
       ISkidList aMembers ) {
     TsNullArgumentRtException.checkNulls( aClusterId, aName, aDescription, aPrimaryMember, aMembers );
     StridUtils.checkValidIdPath( aClusterId );
+    ISkHaCluster cluster = findCluster( aClusterId );
+    if( cluster != null ) {
+      return cluster;
+    }
     TsValidationFailedRtException
         .checkError( svs.validator().canCreateCluster( aClusterId, aName, aDescription, aPrimaryMember, aMembers ) );
     SkidList members = new SkidList( aMembers );
@@ -459,17 +478,11 @@ public class SkHaService
       members.add( aPrimaryMember );
     }
     IDtoFullObject dto = makeDtoFullObject( aClusterId, aName, aDescription, aPrimaryMember, members );
-    ISkHaCluster prevCluster = findCluster( aClusterId );
     pauseCoreValidation();
     try {
-      ISkHaCluster cluster = DtoFullObject.defineFullObject( coreApi(), dto );
-      if( prevCluster == null ) {
-        addRtdataChannelsForCluster( aClusterId );
-        chWritePrimaries.getByKey( aClusterId ).setValue( avValobj( aPrimaryMember ) );
-      }
-      else {
-        cluster.requestPrimaryMemberChange( aPrimaryMember );
-      }
+      cluster = DtoFullObject.defineFullObject( coreApi(), dto );
+      addRtdataChannelsForCluster( aClusterId );
+      chWritePrimaries.getByKey( aClusterId ).setValue( avValobj( aPrimaryMember ) );
       return cluster;
     }
     finally {
