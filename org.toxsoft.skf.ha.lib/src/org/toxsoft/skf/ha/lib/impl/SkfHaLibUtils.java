@@ -15,7 +15,7 @@ import org.toxsoft.uskat.core.impl.*;
  *
  * @author mvk
  */
-public class SkHaLibUtils {
+public class SkfHaLibUtils {
 
   /**
    * Information about class to be defined in {@link ISkHaService}.
@@ -63,7 +63,7 @@ public class SkHaLibUtils {
   /**
    * No subclasses.
    */
-  private SkHaLibUtils() {
+  private SkfHaLibUtils() {
     // nop
   }
 

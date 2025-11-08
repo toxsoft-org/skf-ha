@@ -307,7 +307,7 @@ public class SkHaService
   @Override
   protected void doInit( ITsContextRo aArgs ) {
     // create classes and register object creators
-    for( SkHaLibUtils.BuiltinClassDef b : SkHaLibUtils.BUILTIN_CLASS_DEFS ) {
+    for( SkfHaLibUtils.BuiltinClassDef b : SkfHaLibUtils.BUILTIN_CLASS_DEFS ) {
       sysdescr().defineClass( b.dto() );
       if( b.objCreator() != null ) {
         objServ().registerObjectCreator( b.classId(), b.objCreator() );

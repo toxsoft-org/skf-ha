@@ -46,7 +46,7 @@ public class SkHaSkatlet
   @Override
   protected ValidationResult doInitialize() {
     // Инициализация HA-библиотки
-    SkHaLibUtils.initialize();
+    SkfHaLibUtils.initialize();
 
     return ValidationResult.SUCCESS;
   }
