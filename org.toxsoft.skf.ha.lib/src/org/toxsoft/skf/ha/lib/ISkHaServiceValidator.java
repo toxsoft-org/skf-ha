@@ -5,6 +5,8 @@ import org.toxsoft.core.tslib.gw.skid.*;
 
 /**
  * Validates possible changes in the {@link ISkHaService}.
+ * <p>
+ * FIXME: javadoc
  *
  * @author hazard157
  */
