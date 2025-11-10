@@ -250,7 +250,7 @@ public class SkHaService
     public ValidationResult canRemoveCluster( String aClusterId ) {
       ISkHaCluster cluster = findCluster( aClusterId );
       if( cluster == null ) {
-        return ValidationResult.error( ERR_CLUSTER_NOT_FOUND );
+        return ValidationResult.error( ERR_CLUSTER_NOT_FOUND, aClusterId );
       }
       return ValidationResult.SUCCESS;
     }
@@ -316,7 +316,6 @@ public class SkHaService
     // claim on self classes
     sysdescr().svs().addValidator( claimingValidator );
     objServ().svs().addValidator( claimingValidator );
-
     // register builtin validator
     svs.addValidator( builtinValidator );
 

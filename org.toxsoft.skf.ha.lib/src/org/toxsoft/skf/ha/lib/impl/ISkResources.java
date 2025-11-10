@@ -12,7 +12,7 @@ interface ISkResources {
   // messages
   //
 
-  String MSG_WORKER_STARTED = "HA cluster worker started. count = %d";
+  String MSG_WORKER_STARTED = "HA cluster worker started. cluster count = %d";
   String MSG_CMD_RECEVIED   = "executeCommand(...): receive command = %s";
 
   // ------------------------------------------------------------------------------------
@@ -20,5 +20,5 @@ interface ISkResources {
   //
 
   String ERR_UNKNOWN_CMD_RECEVIED = "executeCommand(...): unknown command: class = %s, cmd = %s";
-  String ERR_CLUSTER_NOT_FOUND    = "executeCommand(...): cluster '%s' does not exist.";
+  String ERR_UNEXPECTED           = "executeCommand(...): unexpected error: aCmd = %s, cause = %s";
 }
