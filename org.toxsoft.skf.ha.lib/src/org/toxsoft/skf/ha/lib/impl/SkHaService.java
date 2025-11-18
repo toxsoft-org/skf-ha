@@ -23,6 +23,7 @@ import org.toxsoft.core.tslib.utils.diff.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.ha.lib.*;
 import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.api.linkserv.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.rtdserv.*;
 import org.toxsoft.uskat.core.devapi.*;
@@ -223,6 +224,15 @@ public class SkHaService
   };
 
   /**
+   * Translates objects change events to the {@link ISkHaServiceListener}.
+   */
+  private final ISkLinkServiceListener linkServiceListener = ( aCoreApi, aChangedLinks ) -> {
+    for( Gwid gwid : aChangedLinks ) {
+      eventer.fireClusterChanged( ECrudOp.EDIT, gwid.strid() );
+    }
+  };
+
+  /**
    * Builtin validator.
    */
   private final ISkHaServiceValidator builtinValidator = new ISkHaServiceValidator() {
@@ -321,6 +331,8 @@ public class SkHaService
 
     // listen to object service to fire ISkHaServiceListener.onXxx() events
     objServ().eventer().addListener( objectServiceListener );
+    // listen to link service to fire ISkHaServiceListener.onXxx() events
+    linkService().eventer().addListener( linkServiceListener );
     // initialize RTdata: PRIMARY for all clusters
     reopenAllRtdataChannels();
   }
