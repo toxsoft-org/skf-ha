@@ -1,6 +1,5 @@
 package org.toxsoft.skf.ha.skatlet;
 
-import static org.toxsoft.core.log4j.LoggerWrapper.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.ha.skatlet.ISkResources.*;
 
@@ -12,6 +11,7 @@ import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.ha.lib.*;
 import org.toxsoft.skf.ha.lib.impl.*;
 import org.toxsoft.uskat.core.connection.*;
@@ -65,7 +65,7 @@ public class SkHaSkatlet
 
     // Инициализация компонентов
     ISkWorkerConfig chainConfig = new SkWorkerConfigBase( ISkHaWorker.WORKER_ID );
-    initWorker( ISkHaWorker.WORKER_ID, workers, sharedCtx, chainConfig, getSharedConnection() );
+    initWorker( ISkHaWorker.WORKER_ID, workers, sharedCtx, chainConfig, getSharedConnection(), logger() );
 
     // Запуск компонент
     for( ISkWorker worker : workers ) {
@@ -149,14 +149,14 @@ public class SkHaSkatlet
    * @throws TsNullArgumentRtException любой аргумент = null
    */
   private static void initWorker( String aWorkerId, SkWorkerRegistry aRegistry, ITsContext aSharedContext,
-      ISkWorkerConfig aInfo, ISkConnection aConnection ) {
+      ISkWorkerConfig aInfo, ISkConnection aConnection, ILogger aLogger ) {
     TsNullArgumentRtException.checkNulls( aWorkerId, aRegistry, aSharedContext, aInfo, aConnection );
     ISkWorker worker = aRegistry.getWorker( aWorkerId );
     TsContext ctx = new TsContext();
     ISkWorkerHardConstants.REFDEF_WORKER_CORE_API.setRef( ctx, aConnection.coreApi() );
     ISkWorkerHardConstants.REFDEF_WORKER_REGISTRY.setRef( ctx, aRegistry );
     ISkWorkerHardConstants.REFDEF_WORKER_SHARED_CONTEXT.setRef( ctx, aSharedContext );
-    ISkWorkerHardConstants.REFDEF_WORKER_LOGGER.setRef( ctx, getLogger( getLoggerName( worker, aInfo ) ) );
+    ISkWorkerHardConstants.REFDEF_WORKER_LOGGER.setRef( ctx, aLogger );
     worker.setContext( ctx );
     worker.setConfiguration( aInfo );
   }
